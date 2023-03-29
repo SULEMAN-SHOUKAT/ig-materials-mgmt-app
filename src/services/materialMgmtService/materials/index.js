@@ -11,4 +11,10 @@ const getMaterials = () =>
 const deleteMaterials = (names) =>
   axios.delete(`${materialsUrl}/delete`, { data: { names } });
 
-export { getMaterials, deleteMaterials };
+const createMaterial = (material) =>
+  axios.post(`${materialsUrl}/create`, { ...material });
+
+const editMaterial = (name, update) =>
+  axios.post(`${materialsUrl}/update`, { name, update });
+
+export { getMaterials, deleteMaterials, createMaterial, editMaterial };

@@ -10,6 +10,8 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 
+import MaterialsForm from "./MaterialsForm";
+
 import TableToolBar from "../../components/TableToolBar";
 import CustomTableHead from "../../components/CustomTableHead";
 import RowActions from "../../components/RowActions";
@@ -23,26 +25,22 @@ const materialsTableFields = [
   {
     id: "name",
     fieldKey: "name",
-    type: "string",
     label: "Name",
   },
   {
     id: "description",
     fieldKey: "description",
-    type: "string",
     label: "Description",
   },
   {
     id: "metaMaterial",
     fieldKey: "metaMaterial",
-    type: "string",
     label: "Meta Material",
   },
   {
     id: "actions",
     fieldKey: null,
     label: null,
-    type: null,
   },
 ];
 
@@ -60,6 +58,8 @@ const MaterialsTable = () => {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [showForm, setShowForm] = useState(false);
+  const [editMaterial, setEditMaterial] = useState(null);
 
   useEffect(() => {
     loadMaterials();
@@ -76,7 +76,6 @@ const MaterialsTable = () => {
       setSelected(materials);
       return;
     }
-    console.log("selected det sss");
     setSelected([]);
   };
 
@@ -109,8 +108,6 @@ const MaterialsTable = () => {
     setPage(0);
   };
 
-  console.log(selected);
-
   const isSelected = (row) => selected.indexOf(row) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty materials.
@@ -119,6 +116,9 @@ const MaterialsTable = () => {
 
   const getFilteredMaterials = () =>
     table.filterData(materials, materialsFilter);
+
+  const getFilteredFields = () =>
+    materialsTableFields.filter((field) => field.id !== "actions");
 
   return (
     <Box sx={{ width: "100%", height: "100%" }}>
@@ -139,6 +139,7 @@ const MaterialsTable = () => {
             onSelectedDelete={() =>
               deleteMaterials(selected, [handleSelectAllClick, loadMaterials])
             }
+            showForm={() => setShowForm(true)}
           />
           <TableContainer sx={{ maxHeight: "47rem" }}>
             {!isLoading ? (
@@ -174,13 +175,16 @@ const MaterialsTable = () => {
                       return (
                         <TableRow
                           hover
-                          onClick={(event) => handleClick(event, row)}
                           role="checkbox"
                           aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row._id}
                           selected={isItemSelected}
                           sx={{ cursor: "pointer" }}
+                          onClick={() => {
+                            setEditMaterial(row);
+                            setShowForm(true);
+                          }}
                         >
                           <TableCell padding="checkbox">
                             <Checkbox
@@ -189,6 +193,7 @@ const MaterialsTable = () => {
                               inputProps={{
                                 "aria-labelledby": labelId,
                               }}
+                              onClick={(event) => handleClick(event, row)}
                             />
                           </TableCell>
                           <TableCell
@@ -213,8 +218,10 @@ const MaterialsTable = () => {
                             {row.metaMaterial}
                           </TableCell>
                           <RowActions
-                            row={row}
-                            onEdit={() => console.log("edit")}
+                            onEdit={() => {
+                              setEditMaterial(row);
+                              setShowForm(true);
+                            }}
                             onDelete={() =>
                               deleteMaterials([row], [loadMaterials])
                             }
@@ -248,6 +255,18 @@ const MaterialsTable = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      {showForm && (
+        <MaterialsForm
+          open={showForm}
+          handleModalClose={() => {
+            setShowForm(false);
+            setEditMaterial(null);
+          }}
+          fields={getFilteredFields()}
+          material={editMaterial}
+          formMode={editMaterial ? "edit" : "new"}
+        />
+      )}
     </Box>
   );
 };

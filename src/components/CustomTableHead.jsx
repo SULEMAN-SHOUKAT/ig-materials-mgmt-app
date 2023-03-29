@@ -7,8 +7,9 @@ import TableRow from "@mui/material/TableRow";
 import { visuallyHidden } from "@mui/utils";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
+import TextField from "@mui/material/TextField";
 
-import InputField from "./InputField";
+import "./CustomTableHead.css";
 
 const CustomTableHead = ({
   onSelectAllClick,
@@ -64,16 +65,17 @@ const CustomTableHead = ({
                   ) : null}
                 </TableSortLabel>
 
-                <InputField
-                  id={headCell.id}
-                  fieldKey={headCell.fieldKey}
-                  type={headCell.type}
-                  onValueChange={(fieldKey, value) =>
-                    setFilters({ ...filters, [fieldKey]: value })
-                  }
-                  value={filters?.[headCell.fieldKey]}
+                <TextField
                   size={"small"}
-                  style={{ width: "90%", marginBottom: "2px" }}
+                  value={filters?.[headCell.fieldKey]}
+                  id={headCell.id}
+                  onChange={(e) =>
+                    setFilters({
+                      ...filters,
+                      [headCell.fieldKey]: e.target.value,
+                    })
+                  }
+                  style={{ width: "90%" }}
                 />
               </Box>
             )}

@@ -1,3 +1,16 @@
-import { getMaterials, deleteMaterials } from "./materials";
+import {
+  getMaterials,
+  deleteMaterials,
+  createMaterial,
+  editMaterial,
+} from "./materials";
+import { getMetaMaterials, deleteMetaMaterials } from "./metaMaterials";
 
-export { getMaterials, deleteMaterials };
+export {
+  getMaterials,
+  deleteMaterials,
+  getMetaMaterials,
+  deleteMetaMaterials,
+  createMaterial,
+  editMaterial,
+};

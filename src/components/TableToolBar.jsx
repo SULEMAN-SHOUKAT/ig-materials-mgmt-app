@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
@@ -8,7 +8,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import Typography from "@mui/material/Typography";
 
-const TableToolBar = ({ numSelected, tableName, onSelectedDelete }) => {
+import AlertDialog from "./AlertDialog";
+
+const TableToolBar = ({
+  numSelected,
+  tableName,
+  onSelectedDelete,
+  showForm,
+}) => {
+  const [showAlertDialog, setShowAlertDialog] = useState(false);
+
   return (
     <Toolbar
       sx={{
@@ -45,17 +54,26 @@ const TableToolBar = ({ numSelected, tableName, onSelectedDelete }) => {
 
       {numSelected > 0 && onSelectedDelete ? (
         <Tooltip title="Delete">
-          <IconButton onClick={onSelectedDelete}>
+          <IconButton onClick={() => setShowAlertDialog(true)}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
       ) : (
         <Tooltip title="Add new item">
-          <IconButton>
+          <IconButton onClick={showForm}>
             <AddIcon />
           </IconButton>
         </Tooltip>
       )}
+      <AlertDialog
+        open={showAlertDialog}
+        message={"Are you sure you wanted to delete records"}
+        handleDialogClose={() => setShowAlertDialog(false)}
+        onPositiveResponse={() => {
+          onSelectedDelete();
+          setShowAlertDialog(false);
+        }}
+      />
     </Toolbar>
   );
 };
@@ -64,6 +82,7 @@ TableToolBar.propTypes = {
   numSelected: PropTypes.number.isRequired,
   tableName: PropTypes.string.isRequired,
   onSelectedDelete: PropTypes.func,
+  showForm: PropTypes.func.isRequired,
 };
 
 TableToolBar.defaultProps = {

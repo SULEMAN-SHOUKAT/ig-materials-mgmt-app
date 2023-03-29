@@ -1,0 +1,7 @@
+.MuiTableCell-head .MuiBox-root .MuiInputBase-input{
+    padding: 2px 0px !important;
+}
+
+.MuiTableCell-head .MuiBox-root{
+    margin-top: 1rem;
+}

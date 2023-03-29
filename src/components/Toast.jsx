@@ -12,10 +12,10 @@ const Toast = () => {
           style: {
             background: "#edf7ed",
           },
-          error: {
-            style: {
-              background: "#fdeded",
-            },
+        },
+        error: {
+          style: {
+            background: "#fdeded",
           },
         },
       }}
