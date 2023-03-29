@@ -76,7 +76,7 @@ const NavBar = () => {
                   <Home color="black" />
                 </ListItemIcon>
                 <ListItemText
-                  primary="IG. Material Mgmt App"
+                  primary="Menu"
                   primaryTypographyProps={{
                     color: "black",
                     fontWeight: "medium",
