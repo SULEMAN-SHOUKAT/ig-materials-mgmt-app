@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import { SketchPicker } from "react-color";
 
 import "./ColorPicker.css";
+import { FormHelperText } from "@mui/material";
 
 const useOutsideClick = (ref, action) => {
   useEffect(() => {
@@ -24,7 +25,7 @@ const useOutsideClick = (ref, action) => {
   }, [ref]);
 };
 
-const ColorPicker = ({ value, onChange, fieldKey, label }) => {
+const ColorPicker = ({ value, onChange, fieldKey, label, error }) => {
   const wrapperRef = useRef(null);
 
   const [showPicker, setShowPicker] = useState(false);
@@ -37,8 +38,19 @@ const ColorPicker = ({ value, onChange, fieldKey, label }) => {
   return (
     <Box ref={wrapperRef}>
       <FormControl onClick={() => setShowPicker(!showPicker)} fullWidth>
-        <InputLabel htmlFor={fieldKey}>{label}</InputLabel>
-        <OutlinedInput id={fieldKey} value={value} label={label} />
+        <InputLabel
+          htmlFor={fieldKey}
+          sx={{ color: error !== "" ? "#d32f2f !important" : "" }}
+        >
+          {label}
+        </InputLabel>
+        <OutlinedInput
+          id={fieldKey}
+          value={value}
+          label={label}
+          error={error !== "" ? true : false}
+        />
+        <FormHelperText sx={{ color: "#d32f2f" }}>{error}</FormHelperText>
         <Box
           width={"24px"}
           height={"24px"}
@@ -54,11 +66,15 @@ const ColorPicker = ({ value, onChange, fieldKey, label }) => {
   );
 };
 
+ColorPicker.defaultProps = {
+  error: "",
+};
 ColorPicker.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   fieldKey: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  error: PropTypes.string,
 };
 
 export default ColorPicker;

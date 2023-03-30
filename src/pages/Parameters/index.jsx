@@ -155,7 +155,7 @@ const Parameters = () => {
     table.filterData(parameters, parametersFilter);
 
   const getFilteredFields = () =>
-    parameters.filter((field) => field.id !== "actions");
+    parametersTableFields.filter((field) => field.id !== "actions");
 
   return (
     <Box sx={{ width: "100%", height: "100%" }}>
@@ -237,7 +237,7 @@ const Parameters = () => {
                               }}
                             />
                           </TableCell>
-                          {parametersTableFields.map((field) => (
+                          {getFilteredFields().map((field) => (
                             <TableCell
                               component="th"
                               key={field.id}

@@ -51,8 +51,14 @@ const MaterialsForm = ({ open, handleModalClose, material, formMode }) => {
     loadMetaMaterials();
   }, [loadMetaMaterials]);
 
-  const fieldChange = (fieldkey, value) =>
-    setNewMaterial({ ...newMaterial, [fieldkey]: value });
+  const fieldChange = async (fieldKey, value) => {
+    setNewMaterial({ ...newMaterial, [fieldKey]: value });
+    const errors = materialHelper.validateMaterial({
+      ...newMaterial,
+      [fieldKey]: value,
+    });
+    setFormErrors(errors);
+  };
 
   const handleSave = () => {
     const errors = materialHelper.validateMaterial(newMaterial);

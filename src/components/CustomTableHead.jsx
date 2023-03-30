@@ -76,7 +76,7 @@ const CustomTableHead = ({
                       [headCell.fieldKey]: e.target.value,
                     })
                   }
-                  style={{ width: "90%" }}
+                  sx={{ width: "90%" }}
                 />
               </Box>
             )}

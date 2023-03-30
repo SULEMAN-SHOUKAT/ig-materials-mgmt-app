@@ -61,19 +61,30 @@ const ParametersForm = ({ open, handleModalClose, parameters, formMode }) => {
   );
   const [formErrors, setFormErrors] = useState({});
 
-  const fieldChange = (fieldKey, value) =>
-    setNewParameters({ ...newParameters, [fieldKey]: value });
+  const fieldChange = async (fieldKey, value) => {
+    await setNewParameters({ ...newParameters, [fieldKey]: value });
+    const errors = parametersHelper.validateParameters({
+      ...newParameters,
+      [fieldKey]: value,
+    });
+    setFormErrors(errors);
+  };
 
   const handleSave = () => {
-    const errors = parametersHelper.validateParameters(newParameters);
-    if (!isObjectEmpty(errors)) {
-      setFormErrors(errors);
-      return;
-    } else {
-      if (formMode === "new") createParameters(newParameters, [loadParameters]);
-      if (formMode === "edit")
-        editParameters(parameters.name, newParameters, [loadParameters]);
-      handleModalClose(false);
+    try {
+      const errors = parametersHelper.validateParameters(newParameters);
+      if (!isObjectEmpty(errors)) {
+        setFormErrors(errors);
+        return;
+      } else {
+        if (formMode === "new")
+          createParameters(newParameters, [loadParameters]);
+        if (formMode === "edit")
+          editParameters(parameters.name, newParameters, [loadParameters]);
+        handleModalClose(false);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -118,6 +129,7 @@ const ParametersForm = ({ open, handleModalClose, parameters, formMode }) => {
               fieldKey="ambient"
               label="Ambient"
               onChange={fieldChange}
+              error={formErrors?.ambient}
             />
           </Grid>
 
@@ -131,7 +143,6 @@ const ParametersForm = ({ open, handleModalClose, parameters, formMode }) => {
               value={newParameters?.shininess}
               onChange={(e) => fieldChange("shininess", e.target.value)}
               helperText={formErrors?.shininess}
-              disabled={formMode === "edit" ? true : false}
             />
           </Grid>
           <Grid item xs={6}>
@@ -140,6 +151,7 @@ const ParametersForm = ({ open, handleModalClose, parameters, formMode }) => {
               fieldKey="specular"
               label="Specular"
               onChange={fieldChange}
+              error={formErrors?.specular}
             />
           </Grid>
           <Grid item xs={6}>
@@ -169,6 +181,7 @@ const ParametersForm = ({ open, handleModalClose, parameters, formMode }) => {
               fieldKey="diffuse"
               label="Diffuse"
               onChange={fieldChange}
+              error={formErrors?.diffuse}
             />
           </Grid>
           <Grid item xs={6}>
@@ -181,7 +194,6 @@ const ParametersForm = ({ open, handleModalClose, parameters, formMode }) => {
               value={newParameters?.transparency}
               onChange={(e) => fieldChange("transparency", e.target.value)}
               helperText={formErrors?.transparency}
-              disabled={formMode === "edit" ? true : false}
             />
           </Grid>
 
@@ -191,6 +203,7 @@ const ParametersForm = ({ open, handleModalClose, parameters, formMode }) => {
               fieldKey="emission"
               label="Emission"
               onChange={fieldChange}
+              error={formErrors?.emission}
             />
           </Grid>
 
