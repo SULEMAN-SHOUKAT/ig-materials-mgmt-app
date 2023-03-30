@@ -23,7 +23,10 @@ const RowActions = ({ onEdit, onDelete }) => {
         )}
         {onDelete && (
           <IconButton
-            onClick={() => setShowAlertDialog(true)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowAlertDialog(true);
+            }}
             sx={{ color: "#d54565a8", fontSize: "16px" }}
           >
             <DeleteIcon />

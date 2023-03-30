@@ -46,6 +46,7 @@ const CustomTableHead = ({
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
             padding={"none"}
+            width={headCell.width}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             {headCell.id !== "actions" && (

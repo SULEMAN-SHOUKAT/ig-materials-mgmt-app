@@ -103,6 +103,7 @@ const MaterialsForm = ({ open, handleModalClose, material, formMode }) => {
               value={newMaterial?.name}
               onChange={(e) => fieldChange("name", e.target.value)}
               helperText={formErrors?.name}
+              disabled={formMode === "edit" ? true : false}
             />
           </Grid>
           <Grid item xs={6}>
@@ -114,6 +115,9 @@ const MaterialsForm = ({ open, handleModalClose, material, formMode }) => {
               value={newMaterial?.metaMaterial}
               onChange={(e) => fieldChange("metaMaterial", e.target.value)}
             >
+              {metaMaterials.length == 0 && (
+                <MenuItem disabled>No meta materials found</MenuItem>
+              )}
               {!isLoadingMetaMaterials &&
                 metaMaterials.map((option) => (
                   <MenuItem key={option.name} value={option.name}>

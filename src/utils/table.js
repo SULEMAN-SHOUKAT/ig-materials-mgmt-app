@@ -35,7 +35,10 @@ const filterData = (data, filter) =>
         !isEmpty(filter[key]) &&
         (dataObj[key] === undefined ||
           dataObj[key] === null ||
-          !dataObj[key].includes(filter[key]))
+          !dataObj[key]
+            .toString()
+            .toLowerCase()
+            .includes(filter[key].toString().toLowerCase()))
       ) {
         return false;
       }

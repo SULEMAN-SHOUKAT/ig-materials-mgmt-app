@@ -50,10 +50,22 @@ const AlertDialog = ({
           </Typography>
         </CardContent>
         <CardActions sx={{ justifyContent: "flex-end" }}>
-          <Button variant="contained" onClick={onPositiveResponse}>
+          <Button
+            variant="contained"
+            onClick={(e) => {
+              e.stopPropagation();
+              onPositiveResponse();
+            }}
+          >
             Yes
           </Button>
-          <Button variant="outlined" onClick={handleDialogClose}>
+          <Button
+            variant="outlined"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDialogClose();
+            }}
+          >
             No
           </Button>
         </CardActions>

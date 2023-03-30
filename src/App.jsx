@@ -7,12 +7,10 @@ import Header from "./Layout/Header";
 import Toast from "./components/Toast";
 
 import Materials from "./pages/Materials";
+import Parameters from "./pages/Parameters";
 
 import "./App.css";
 
-function Parameters() {
-  return <h1>params</h1>;
-}
 function Textures() {
   return <h1>texture</h1>;
 }
@@ -53,11 +51,11 @@ const App = () => {
       <Header toggleNavBar={() => setShowNavBar(!showNavBar)} />
       <Grid container spacing={2} style={{ height: "100vh" }}>
         {showNavBar && (
-          <Grid item xs={3} marginTop={8}>
+          <Grid item xs={2} marginTop={8}>
             <NavBar />
           </Grid>
         )}
-        <Grid item xs={showNavBar ? 9 : 12} marginTop={8}>
+        <Grid item xs={showNavBar ? 10 : 12} marginTop={8}>
           <RouterProvider router={router} />
         </Grid>
       </Grid>
