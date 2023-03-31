@@ -47,14 +47,20 @@ const prepareInitialParametersValue = (parameters) => ({
 });
 
 const ParametersForm = ({ open, handleModalClose, parameters, formMode }) => {
-  const { createParameters, loadParameters, editParameters } = useParameters();
+  const {
+    createParameters,
+    loadParameters,
+    editParameters,
+    parameters: oldParameters,
+  } = useParameters();
   const { textures, loadTextures, isLoadingTexture } = useTexture();
   const { mappings, loadMappings, isLoadingMappings } = useMappings();
 
   useEffect(() => {
     loadTextures();
     loadMappings();
-  }, [loadTextures, loadMappings]);
+    loadParameters();
+  }, [loadTextures, loadMappings, loadParameters]);
 
   const [newParameters, setNewParameters] = useState(
     prepareInitialParametersValue(parameters)
@@ -63,16 +69,22 @@ const ParametersForm = ({ open, handleModalClose, parameters, formMode }) => {
 
   const fieldChange = async (fieldKey, value) => {
     await setNewParameters({ ...newParameters, [fieldKey]: value });
-    const errors = parametersHelper.validateParameters({
-      ...newParameters,
-      [fieldKey]: value,
-    });
-    setFormErrors(errors);
+    const fieldError = parametersHelper.validateParametersField(
+      value,
+      fieldKey,
+      oldParameters,
+      formMode
+    );
+    setFormErrors({ ...formErrors, [fieldKey]: fieldError });
   };
 
   const handleSave = () => {
     try {
-      const errors = parametersHelper.validateParameters(newParameters);
+      const errors = parametersHelper.validateParameters(
+        newParameters,
+        oldParameters,
+        formMode
+      );
       if (!isObjectEmpty(errors)) {
         setFormErrors(errors);
         return;

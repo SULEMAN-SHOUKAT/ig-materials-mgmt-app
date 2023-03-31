@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
@@ -10,32 +10,29 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 
-import MaterialsForm from "./MaterialsForm";
-
 import TableToolBar from "../../components/TableToolBar";
 import CustomTableHead from "../../components/CustomTableHead";
 import RowActions from "../../components/RowActions";
 import Loading from "../../components/Loading";
 
+import TexturesForm from "./TextureForm";
+
 import { table } from "../../utils";
 
-import useMaterials from "../../store/materials";
+import useTexture from "../../store/texture";
 
-const materialsTableFields = [
+const TextureTableFields = [
   {
     id: "name",
     fieldKey: "name",
     label: "Name",
+    width: "20%",
   },
   {
     id: "description",
     fieldKey: "description",
     label: "Description",
-  },
-  {
-    id: "metaMaterial",
-    fieldKey: "metaMaterial",
-    label: "Meta Material",
+    width: "70%",
   },
   {
     id: "actions",
@@ -44,26 +41,26 @@ const materialsTableFields = [
   },
 ];
 
-const MaterialsTable = () => {
+const Texture = () => {
   const {
-    materials,
-    loadMaterials,
+    textures,
+    loadTextures,
     isLoading,
-    setMaterialsFilters,
-    materialsFilter,
-    deleteMaterials,
-  } = useMaterials();
+    setTexturesFilters,
+    texturesFilter,
+    deleteTextures,
+  } = useTexture();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("");
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [showForm, setShowForm] = useState(false);
-  const [editMaterial, setEditMaterial] = useState(null);
+  const [editTexture, setEditTexture] = useState(null);
 
   useEffect(() => {
-    loadMaterials();
-  }, [loadMaterials]);
+    loadTextures();
+  }, [loadTextures]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -73,7 +70,7 @@ const MaterialsTable = () => {
 
   const handleSelectAllClick = (event) => {
     if (event?.target?.checked) {
-      setSelected(materials);
+      setSelected(textures);
       return;
     }
     setSelected([]);
@@ -110,15 +107,14 @@ const MaterialsTable = () => {
 
   const isSelected = (row) => selected.indexOf(row) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty materials.
+  // Avoid a layout jump when reaching the last page with empty textures.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - materials.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - textures.length) : 0;
 
-  const getFilteredMaterials = () =>
-    table.filterData(materials, materialsFilter);
+  const getFilteredTextures = () => table.filterData(textures, texturesFilter);
 
   const getFilteredFields = () =>
-    materialsTableFields.filter((field) => field.id !== "actions");
+    TextureTableFields.filter((field) => field.id !== "actions");
 
   return (
     <Box sx={{ width: "100%", height: "100%" }}>
@@ -135,9 +131,9 @@ const MaterialsTable = () => {
         <Box sx={{ maxHeight: "78%" }}>
           <TableToolBar
             numSelected={selected.length}
-            tableName="Materials"
+            tableName="Textures"
             onSelectedDelete={() =>
-              deleteMaterials(selected, [handleSelectAllClick, loadMaterials])
+              deleteTextures(selected, [handleSelectAllClick, loadTextures])
             }
             showForm={() => setShowForm(true)}
           />
@@ -145,7 +141,7 @@ const MaterialsTable = () => {
             {!isLoading ? (
               <Table
                 sx={{ minWidth: 750 }}
-                aria-labelledby="Materials"
+                aria-labelledby="Textures"
                 size={"medium"}
                 stickyHeader
               >
@@ -155,16 +151,16 @@ const MaterialsTable = () => {
                   orderBy={orderBy}
                   onSelectAllClick={handleSelectAllClick}
                   onRequestSort={handleRequestSort}
-                  rowCount={getFilteredMaterials()?.length}
-                  tableCells={materialsTableFields}
-                  setFilters={setMaterialsFilters}
-                  filters={materialsFilter}
+                  rowCount={getFilteredTextures()?.length}
+                  tableCells={TextureTableFields}
+                  setFilters={setTexturesFilters}
+                  filters={texturesFilter}
                 />
 
                 <TableBody>
                   {table
                     .stableSort(
-                      getFilteredMaterials(),
+                      getFilteredTextures(),
                       table.getComparator(order, orderBy)
                     )
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -183,7 +179,7 @@ const MaterialsTable = () => {
                           sx={{ cursor: "pointer" }}
                           onClick={(e) => {
                             e.stopPropagation();
-                            setEditMaterial(row);
+                            setEditTexture(row);
                             setShowForm(true);
                           }}
                         >
@@ -215,19 +211,13 @@ const MaterialsTable = () => {
                           >
                             <Box width={"90%"}>{row.description}</Box>
                           </TableCell>
-                          <TableCell
-                            align="left"
-                            sx={{ padding: "0px 0px 0px 5px" }}
-                          >
-                            {row.metaMaterial}
-                          </TableCell>
                           <RowActions
                             onEdit={() => {
-                              setEditMaterial(row);
+                              setEditTexture(row);
                               setShowForm(true);
                             }}
                             onDelete={() =>
-                              deleteMaterials([row], [loadMaterials])
+                              deleteTextures([row], [loadTextures])
                             }
                           />
                         </TableRow>
@@ -245,14 +235,14 @@ const MaterialsTable = () => {
                 </TableBody>
               </Table>
             ) : (
-              <Loading message="loading materials..." />
+              <Loading message="loading textures..." />
             )}
           </TableContainer>
         </Box>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25, 50]}
           component="div"
-          count={getFilteredMaterials()?.length}
+          count={getFilteredTextures()?.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -260,19 +250,19 @@ const MaterialsTable = () => {
         />
       </Paper>
       {showForm && (
-        <MaterialsForm
+        <TexturesForm
           open={showForm}
           handleModalClose={() => {
             setShowForm(false);
-            setEditMaterial(null);
+            setEditTexture(null);
           }}
           fields={getFilteredFields()}
-          material={editMaterial}
-          formMode={editMaterial ? "edit" : "new"}
+          texture={editTexture}
+          formMode={editTexture ? "edit" : "new"}
         />
       )}
     </Box>
   );
 };
 
-export default MaterialsTable;
+export default Texture;

@@ -13,9 +13,19 @@ import {
   deleteParameters,
 } from "./parameters";
 
-import { getTextures } from "./textures";
+import {
+  getTextures,
+  deleteTextures,
+  createTexture,
+  editTexture,
+} from "./textures";
 
-import { getMappings } from "./mappings";
+import {
+  getMappings,
+  deleteMappings,
+  createMappings,
+  editMappings,
+} from "./mappings";
 
 export {
   getMaterials,
@@ -30,4 +40,10 @@ export {
   deleteParameters,
   getTextures,
   getMappings,
+  deleteTextures,
+  createTexture,
+  editTexture,
+  deleteMappings,
+  createMappings,
+  editMappings,
 };

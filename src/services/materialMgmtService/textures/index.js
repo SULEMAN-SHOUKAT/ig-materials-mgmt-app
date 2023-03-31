@@ -12,4 +12,10 @@ const getTextures = () =>
 const deleteTextures = (names) =>
   axios.delete(`${texturesUrl}/delete`, { data: { names } });
 
-export { getTextures, deleteTextures };
+const createTexture = (material) =>
+  axios.post(`${texturesUrl}/create`, { ...material });
+
+const editTexture = (name, update) =>
+  axios.post(`${texturesUrl}/update`, { name, update });
+
+export { getTextures, deleteTextures, createTexture, editTexture };

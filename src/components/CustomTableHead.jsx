@@ -21,15 +21,43 @@ const CustomTableHead = ({
   tableCells,
   setFilters,
   filters,
+  colGroups,
 }) => {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
 
   return (
-    <TableHead>
+    <TableHead sx={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 0px 2.6px" }}>
+      {colGroups && (
+        <TableRow>
+          {colGroups.map((groupCol) => (
+            <TableCell
+              key={groupCol.label}
+              align="center"
+              colSpan={groupCol.colSpan}
+              sx={{
+                borderRight: "1px solid #e0e0e0",
+                borderTop: "1px solid #e0e0e0",
+                padding: "2px 0px 2px 0px",
+                backgroundColor: "#F2F2F2",
+              }}
+            >
+              {groupCol.label}
+            </TableCell>
+          ))}
+        </TableRow>
+      )}
       <TableRow>
-        <TableCell padding="checkbox">
+        <TableCell
+          padding="checkbox"
+          sx={{
+            backgroundColor: "#F2F2F2",
+            borderRight: "1px solid #e0e0e0",
+            borderTop: "1px solid #e0e0e0",
+            borderBottom: "1px solid #e0e0e0",
+          }}
+        >
           <Checkbox
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -37,6 +65,7 @@ const CustomTableHead = ({
             onChange={onSelectAllClick}
             inputProps={{
               "aria-label": "select all desserts",
+              style: { backgroundColor: "white" },
             }}
             sx={{ marginTop: "28px" }}
           />
@@ -45,9 +74,15 @@ const CustomTableHead = ({
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
-            padding={"none"}
             width={headCell.width}
             sortDirection={orderBy === headCell.id ? order : false}
+            sx={{
+              borderRight: "1px solid #e0e0e0",
+              borderTop: "1px solid #e0e0e0",
+              borderBottom: "1px solid #e0e0e0",
+              padding: "0px 0px 0px 0px",
+              backgroundColor: "#F2F2F2",
+            }}
           >
             {headCell.id !== "actions" && (
               <Box>
@@ -55,8 +90,15 @@ const CustomTableHead = ({
                   active={orderBy === headCell.id}
                   direction={orderBy === headCell.id ? order : "asc"}
                   onClick={createSortHandler(headCell.id)}
+                  sx={{
+                    fontSize: headCell.headerFontSize,
+                    borderBottom: "1px solid #e0e0e0",
+                    width: "100%",
+                  }}
                 >
-                  {headCell.label}
+                  <Box sx={{ padding: "0px 0px 0px 2px" }}>
+                    {headCell.label}
+                  </Box>
                   {orderBy === headCell.id ? (
                     <Box component="span" sx={visuallyHidden}>
                       {order === "desc"
@@ -76,7 +118,12 @@ const CustomTableHead = ({
                       [headCell.fieldKey]: e.target.value,
                     })
                   }
-                  sx={{ width: "90%" }}
+                  inputProps={{ style: { backgroundColor: "white" } }}
+                  sx={{
+                    width: "97%",
+                    marginTop: "10px",
+                    marginLeft: "2px",
+                  }}
                 />
               </Box>
             )}
@@ -97,6 +144,9 @@ CustomTableHead.propTypes = {
   tableCells: PropTypes.array.isRequired,
   setFilters: PropTypes.func.isRequired,
   filters: PropTypes.object.isRequired,
+  colGroups: PropTypes.array,
 };
-
+CustomTableHead.defaultProps = {
+  colGroups: undefined,
+};
 export default CustomTableHead;

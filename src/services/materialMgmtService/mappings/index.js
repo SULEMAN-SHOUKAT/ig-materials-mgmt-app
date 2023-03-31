@@ -12,4 +12,10 @@ const getMappings = () =>
 const deleteMappings = (names) =>
   axios.delete(`${mappingsUrl}/delete`, { data: { names } });
 
-export { getMappings, deleteMappings };
+const createMappings = (parameters) =>
+  axios.post(`${mappingsUrl}/create`, { ...parameters });
+
+const editMappings = (name, update) =>
+  axios.post(`${mappingsUrl}/update`, { name, update });
+
+export { getMappings, deleteMappings, createMappings, editMappings };

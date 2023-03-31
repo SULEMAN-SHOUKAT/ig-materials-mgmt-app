@@ -1,7 +1,9 @@
 import { isEmpty, isNumber } from "../../utils";
 
-const validateName = (name) => {
+const validateName = (name, oldParameters, formMode) => {
   if (isEmpty(name)) return "Name is required";
+  if (oldParameters.some((param) => param.name === name) && formMode === "new")
+    return "This name is already used";
   return undefined;
 };
 
@@ -39,30 +41,37 @@ const validateAmbient = (ambient) => {
   return undefined;
 };
 
-const validateParameters = (parameters) => {
+const validators = {
+  name: validateName,
+  transparency: ValidateTransparency,
+  diffuse: ValidateDiffuse,
+  specular: ValidateSpecular,
+  emission: validateEmission,
+  shininess: ValidateShininess,
+  ambient: validateAmbient,
+  default: () => undefined,
+};
+const validateParametersField = (value, key, oldParameters, formMode) => {
+  if (validators[key]) return validators[key](value, oldParameters, formMode);
+  return validators.default();
+};
+
+const validateParameters = (parameters, oldParameters, formMode) => {
   let errors = {};
-
-  const nameErrors = validateName(parameters?.name);
-  const shininessErrors = ValidateShininess(parameters?.shininess);
-  const transparencyErrors = ValidateTransparency(parameters?.transparency);
-  const diffuseErrors = ValidateDiffuse(parameters?.diffuse);
-  const specularErrors = ValidateSpecular(parameters?.specular);
-  const emissionErrors = validateEmission(parameters?.emission);
-  const ambientErrors = validateAmbient(parameters?.ambient);
-
-  errors = {
-    name: nameErrors,
-    transparency: transparencyErrors,
-    diffuse: diffuseErrors,
-    specular: specularErrors,
-    emission: emissionErrors,
-    shininess: shininessErrors,
-    ambient: ambientErrors,
-  };
-
-  console.log(errors);
+  Object.keys(parameters).forEach((fieldKey) => {
+    const fieldError = validateParametersField(
+      parameters[fieldKey],
+      fieldKey,
+      oldParameters,
+      formMode
+    );
+    errors = {
+      ...errors,
+      [fieldKey]: fieldError,
+    };
+  });
   return errors;
 };
 
-const parametersHelper = { validateParameters };
+const parametersHelper = { validateParameters, validateParametersField };
 export default parametersHelper;

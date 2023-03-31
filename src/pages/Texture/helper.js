@@ -1,8 +1,8 @@
 import { isEmpty } from "../../utils";
 
-const validateName = (name, oldMaterials, formMode) => {
+const validateName = (name, oldTextures, formMode) => {
   if (isEmpty(name)) return "Name is required";
-  if (oldMaterials.some((mat) => mat.name === name) && formMode === "new")
+  if (oldTextures.some((tex) => tex.name === name) && formMode === "new")
     return "This name is already used";
   return undefined;
 };
@@ -19,18 +19,18 @@ const validators = {
   default: () => undefined,
 };
 
-const validateMaterialsField = (value, key, oldMaterials, formMode) => {
-  if (validators[key]) return validators[key](value, oldMaterials, formMode);
+const validateTextureField = (value, key, oldTextures, formMode) => {
+  if (validators[key]) return validators[key](value, oldTextures, formMode);
   return validators.default();
 };
 
-const validateMaterial = (material, oldMaterials, formMode) => {
+const validateTexture = (texture, oldTextures, formMode) => {
   let errors = {};
-  Object.keys(material).forEach((fieldKey) => {
-    const fieldError = validateMaterialsField(
-      material[fieldKey],
+  Object.keys(texture).forEach((fieldKey) => {
+    const fieldError = validateTextureField(
+      texture[fieldKey],
       fieldKey,
-      oldMaterials,
+      oldTextures,
       formMode
     );
     errors = {
@@ -41,5 +41,5 @@ const validateMaterial = (material, oldMaterials, formMode) => {
   return errors;
 };
 
-const materialHelper = { validateMaterial, validateMaterialsField };
-export default materialHelper;
+const textureHelper = { validateTexture, validateTextureField };
+export default textureHelper;

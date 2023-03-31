@@ -20,7 +20,7 @@ const useState = create((set) => ({
   },
   deleteParameters: async (parameters, callBackFunctions = []) => {
     try {
-      const names = parameters.map((material) => material.name);
+      const names = parameters.map((parameter) => parameter.name);
       const result = await deleteParameters(names);
       successToast("Successfully removed data");
       callBackFunctions.forEach(async (func) => await func());

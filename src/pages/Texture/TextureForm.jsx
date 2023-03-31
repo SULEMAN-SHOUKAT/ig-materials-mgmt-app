@@ -7,17 +7,13 @@ import Modal from "@mui/material/Modal";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 
-import materialHelper from "./helper";
+import TextureHelper from "./helper";
 import { isObjectEmpty } from "../../utils";
 
-import useMetaMaterials from "../../store/metaMaterial";
-import useMaterials from "../../store/materials";
-
-import "./MaterialForm.css";
+import useTexture from "../../store/texture";
 
 const style = {
   position: "absolute",
@@ -31,52 +27,47 @@ const style = {
   width: "30rem",
 };
 
-const prepareInitialMaterialValue = (material) => ({
+const prepareInitialTextureValue = (material) => ({
   name: material?.name || "",
   description: material?.description || "",
-  metaMaterial: material?.metaMaterial || "",
 });
 
-const MaterialsForm = ({ open, handleModalClose, material, formMode }) => {
-  const { metaMaterials, isLoadingMetaMaterials, loadMetaMaterials } =
-    useMetaMaterials();
-  const { createMaterial, loadMaterials, editMaterial, materials } =
-    useMaterials();
+const TexturesForm = ({ open, handleModalClose, texture, formMode }) => {
+  const { createTexture, loadTextures, editTexture, textures } = useTexture();
 
-  const [newMaterial, setNewMaterial] = useState(
-    prepareInitialMaterialValue(material)
+  const [newTexture, setNewTexture] = useState(
+    prepareInitialTextureValue(texture)
   );
   const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
-    loadMetaMaterials();
-    loadMaterials();
-  }, [loadMetaMaterials, loadMaterials]);
+    loadTextures();
+  }, [loadTextures]);
 
   const fieldChange = async (fieldKey, value) => {
-    setNewMaterial({ ...newMaterial, [fieldKey]: value });
-    const error = materialHelper.validateMaterialsField(
+    setNewTexture({ ...newTexture, [fieldKey]: value });
+    const error = TextureHelper.validateTextureField(
       value,
       fieldKey,
-      materials,
+      textures,
       formMode
     );
     setFormErrors({ ...formErrors, [fieldKey]: error });
   };
 
   const handleSave = () => {
-    const errors = materialHelper.validateMaterial(
-      newMaterial,
-      materials,
+    const errors = TextureHelper.validateTexture(
+      newTexture,
+      textures,
       formMode
     );
     if (!isObjectEmpty(errors)) {
       setFormErrors(errors);
       return;
     } else {
-      if (formMode === "new") createMaterial(newMaterial, [loadMaterials]);
+      if (formMode === "new") createTexture(newTexture, [loadTextures]);
       if (formMode === "edit")
-        editMaterial(material.name, newMaterial, [loadMaterials]);
+        editTexture(texture.name, newTexture, [loadTextures]);
       handleModalClose(false);
     }
   };
@@ -96,7 +87,7 @@ const MaterialsForm = ({ open, handleModalClose, material, formMode }) => {
           }}
         >
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Materials Form
+            Texture Form
           </Typography>
           <IconButton onClick={handleModalClose}>
             <CloseIcon />
@@ -114,39 +105,20 @@ const MaterialsForm = ({ open, handleModalClose, material, formMode }) => {
               id="name"
               label="Name"
               fullWidth
-              value={newMaterial?.name}
+              value={newTexture?.name}
               onChange={(e) => fieldChange("name", e.target.value)}
               helperText={formErrors?.name}
               disabled={formMode === "edit" ? true : false}
             />
           </Grid>
-          <Grid item xs={6}>
-            <TextField
-              id="metaMaterial"
-              label="MetaMaterial"
-              fullWidth
-              select
-              value={newMaterial?.metaMaterial}
-              onChange={(e) => fieldChange("metaMaterial", e.target.value)}
-            >
-              {metaMaterials.length == 0 && (
-                <MenuItem disabled>No meta materials found</MenuItem>
-              )}
-              {!isLoadingMetaMaterials &&
-                metaMaterials.map((option) => (
-                  <MenuItem key={option.name} value={option.name}>
-                    {option.name}
-                  </MenuItem>
-                ))}
-            </TextField>
-          </Grid>
+
           <Grid item xs={12}>
             <TextField
               error={formErrors?.description ? true : false}
               id="description"
               label="Description"
               fullWidth
-              value={newMaterial?.description}
+              value={newTexture?.description}
               onChange={(e) => fieldChange("description", e.target.value)}
               helperText={formErrors?.description}
             />
@@ -176,17 +148,17 @@ const MaterialsForm = ({ open, handleModalClose, material, formMode }) => {
   );
 };
 
-MaterialsForm.defaultProps = {
+TexturesForm.defaultProps = {
   open: false,
   handleModalClose: undefined,
-  material: null,
+  texture: null,
   formMode: "new",
 };
-MaterialsForm.propTypes = {
+TexturesForm.propTypes = {
   open: PropTypes.bool,
   handleModalClose: PropTypes.func,
-  material: PropTypes.object,
+  texture: PropTypes.object,
   formMode: PropTypes.string,
 };
 
-export default MaterialsForm;
+export default TexturesForm;

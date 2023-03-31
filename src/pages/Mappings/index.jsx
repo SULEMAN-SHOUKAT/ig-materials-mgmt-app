@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
@@ -10,32 +10,107 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 
-import MaterialsForm from "./MaterialsForm";
-
 import TableToolBar from "../../components/TableToolBar";
 import CustomTableHead from "../../components/CustomTableHead";
 import RowActions from "../../components/RowActions";
 import Loading from "../../components/Loading";
 
+import MappingsForm from "./MappingsForm";
+
 import { table } from "../../utils";
 
-import useMaterials from "../../store/materials";
+import useMappings from "../../store/mappings";
 
-const materialsTableFields = [
+const colGroups = [
+  {
+    label: "Mapping",
+    colSpan: 3,
+  },
+  {
+    label: "Offset",
+    colSpan: 3,
+  },
+  {
+    label: "Scale IG.GFX",
+    colSpan: 2,
+  },
+  {
+    label: "Scale Blender",
+    colSpan: 2,
+  },
+  {
+    label: "",
+    reason: "empty label because of action colummn",
+  },
+];
+const mappingsTableFields = [
   {
     id: "name",
     fieldKey: "name",
     label: "Name",
+    width: "11%",
   },
   {
     id: "description",
     fieldKey: "description",
     label: "Description",
+    width: "23%",
   },
   {
-    id: "metaMaterial",
-    fieldKey: "metaMaterial",
-    label: "Meta Material",
+    id: "translationS",
+    fieldKey: "translationS",
+    label: "Trans S (0.0) {}",
+    headerFontSize: "10px",
+    width: "9%",
+    isNumber: true,
+  },
+  {
+    id: "translationT",
+    headerFontSize: "10px",
+    fieldKey: "translationT",
+    label: "Trans T (0.0) {}",
+    width: "9%",
+    isNumber: true,
+  },
+  {
+    id: "rotation",
+    fieldKey: "rotation",
+    label: "Rot (0.0 D) {}",
+    headerFontSize: "10px",
+    width: "9%",
+    isNumber: true,
+  },
+  {
+    id: "scaleS",
+    fieldKey: "scaleS",
+    label: "Scale S (1.0) {}",
+    headerFontSize: "10px",
+    width: "9%",
+    isNumber: true,
+  },
+  {
+    id: "scaleT",
+    fieldKey: "scaleT",
+    label: "Scale T (1.0) {}",
+    headerFontSize: "10px",
+    width: "9%",
+    isNumber: true,
+  },
+  {
+    id: "repeatS",
+    fieldKey: "repeatS",
+    label: "Repeat S (1.0)",
+    headerFontSize: "10px",
+    width: "9%",
+    isNumber: true,
+  },
+  {
+    id: "repeatT",
+    fieldKey: "repeatT",
+    label: "Repeat T (1.0)",
+    headerFontSize: "10px",
+    width: "9%",
+    isNumber: true,
   },
   {
     id: "actions",
@@ -44,26 +119,27 @@ const materialsTableFields = [
   },
 ];
 
-const MaterialsTable = () => {
+const Mappings = () => {
   const {
-    materials,
-    loadMaterials,
-    isLoading,
-    setMaterialsFilters,
-    materialsFilter,
-    deleteMaterials,
-  } = useMaterials();
+    mappings,
+    isLoadingMappings,
+    mappingsFilter,
+    loadMappings,
+    setMappingsFilters,
+    deleteMappings,
+  } = useMappings();
+
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("");
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [showForm, setShowForm] = useState(false);
-  const [editMaterial, setEditMaterial] = useState(null);
+  const [editMapping, setEditMapping] = useState(null);
 
   useEffect(() => {
-    loadMaterials();
-  }, [loadMaterials]);
+    loadMappings();
+  }, [loadMappings]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -73,7 +149,7 @@ const MaterialsTable = () => {
 
   const handleSelectAllClick = (event) => {
     if (event?.target?.checked) {
-      setSelected(materials);
+      setSelected(mappings);
       return;
     }
     setSelected([]);
@@ -112,13 +188,12 @@ const MaterialsTable = () => {
 
   // Avoid a layout jump when reaching the last page with empty materials.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - materials.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - mappings.length) : 0;
 
-  const getFilteredMaterials = () =>
-    table.filterData(materials, materialsFilter);
+  const getFilteredMappings = () => table.filterData(mappings, mappingsFilter);
 
   const getFilteredFields = () =>
-    materialsTableFields.filter((field) => field.id !== "actions");
+    mappingsTableFields.filter((field) => field.id !== "actions");
 
   return (
     <Box sx={{ width: "100%", height: "100%" }}>
@@ -135,17 +210,17 @@ const MaterialsTable = () => {
         <Box sx={{ maxHeight: "78%" }}>
           <TableToolBar
             numSelected={selected.length}
-            tableName="Materials"
+            tableName="Mappings"
             onSelectedDelete={() =>
-              deleteMaterials(selected, [handleSelectAllClick, loadMaterials])
+              deleteMappings(selected, [handleSelectAllClick, loadMappings])
             }
             showForm={() => setShowForm(true)}
           />
           <TableContainer sx={{ maxHeight: "47rem" }}>
-            {!isLoading ? (
+            {!isLoadingMappings ? (
               <Table
                 sx={{ minWidth: 750 }}
-                aria-labelledby="Materials"
+                aria-labelledby="Mappings"
                 size={"medium"}
                 stickyHeader
               >
@@ -155,16 +230,17 @@ const MaterialsTable = () => {
                   orderBy={orderBy}
                   onSelectAllClick={handleSelectAllClick}
                   onRequestSort={handleRequestSort}
-                  rowCount={getFilteredMaterials()?.length}
-                  tableCells={materialsTableFields}
-                  setFilters={setMaterialsFilters}
-                  filters={materialsFilter}
+                  rowCount={getFilteredMappings()?.length}
+                  tableCells={mappingsTableFields}
+                  setFilters={setMappingsFilters}
+                  filters={mappingsFilter}
+                  colGroups={colGroups}
                 />
 
                 <TableBody>
                   {table
                     .stableSort(
-                      getFilteredMaterials(),
+                      getFilteredMappings(),
                       table.getComparator(order, orderBy)
                     )
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -183,7 +259,7 @@ const MaterialsTable = () => {
                           sx={{ cursor: "pointer" }}
                           onClick={(e) => {
                             e.stopPropagation();
-                            setEditMaterial(row);
+                            setEditMapping(row);
                             setShowForm(true);
                           }}
                         >
@@ -200,35 +276,32 @@ const MaterialsTable = () => {
                               }}
                             />
                           </TableCell>
-                          <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                            sx={{ padding: "0px 0px 0px 5px" }}
-                          >
-                            {row.name}
-                          </TableCell>
-                          <TableCell
-                            align="left"
-                            width={"60%"}
-                            sx={{ padding: "0px 0px 0px 5px" }}
-                          >
-                            <Box width={"90%"}>{row.description}</Box>
-                          </TableCell>
-                          <TableCell
-                            align="left"
-                            sx={{ padding: "0px 0px 0px 5px" }}
-                          >
-                            {row.metaMaterial}
-                          </TableCell>
+                          {getFilteredFields().map((field) => (
+                            <TableCell
+                              component="th"
+                              key={field.id}
+                              id={labelId}
+                              scope="row"
+                              width={field.width}
+                              align={field.isNumber ? "right" : "left"}
+                              sx={{
+                                padding: "0px 22px 0px 5px",
+                                width: field.isNumber ? "77px" : "",
+                                textAlign: !field.isNumber ? "justify" : "",
+                              }}
+                            >
+                              {row[field.fieldKey]}
+                            </TableCell>
+                          ))}
+
                           <RowActions
                             onEdit={() => {
-                              setEditMaterial(row);
+                              setEditMapping(row);
                               setShowForm(true);
                             }}
-                            onDelete={() =>
-                              deleteMaterials([row], [loadMaterials])
-                            }
+                            onDelete={() => {
+                              deleteMappings([row], [loadMappings]);
+                            }}
                           />
                         </TableRow>
                       );
@@ -245,14 +318,14 @@ const MaterialsTable = () => {
                 </TableBody>
               </Table>
             ) : (
-              <Loading message="loading materials..." />
+              <Loading message="loading mappings..." />
             )}
           </TableContainer>
         </Box>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25, 50]}
           component="div"
-          count={getFilteredMaterials()?.length}
+          count={getFilteredMappings()?.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -260,19 +333,19 @@ const MaterialsTable = () => {
         />
       </Paper>
       {showForm && (
-        <MaterialsForm
+        <MappingsForm
           open={showForm}
           handleModalClose={() => {
             setShowForm(false);
-            setEditMaterial(null);
+            setEditMapping(null);
           }}
           fields={getFilteredFields()}
-          material={editMaterial}
-          formMode={editMaterial ? "edit" : "new"}
+          mappings={editMapping}
+          formMode={editMapping ? "edit" : "new"}
         />
       )}
     </Box>
   );
 };
 
-export default MaterialsTable;
+export default Mappings;

@@ -8,16 +8,11 @@ import Toast from "./components/Toast";
 
 import Materials from "./pages/Materials";
 import Parameters from "./pages/Parameters";
+import Texture from "./pages/Texture";
+import Mappings from "./pages/Mappings";
 
 import "./App.css";
 
-function Textures() {
-  return <h1>texture</h1>;
-}
-
-function Mappings() {
-  return <h1>mappings</h1>;
-}
 function MetaMaterials() {
   return <h1>meta-materials</h1>;
 }
@@ -32,7 +27,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/textures",
-    element: <Textures />,
+    element: <Texture />,
   },
   {
     path: "/mappings",
