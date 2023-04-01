@@ -29,7 +29,7 @@ const stableSort = (array, comparator) => {
 const isEmpty = (val) => [undefined, null, ""].includes(val);
 
 const filterData = (data, filter) =>
-  data.filter((dataObj) => {
+  data?.filter((dataObj) => {
     for (const key in filter) {
       if (
         !isEmpty(filter[key]) &&

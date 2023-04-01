@@ -3,6 +3,7 @@ import {
   deleteMaterials,
   createMaterial,
   editMaterial,
+  getMaterialFiles,
 } from "./materials";
 import {
   getMetaMaterials,
@@ -29,6 +30,7 @@ import {
   deleteTextures,
   createTexture,
   editTexture,
+  getTextureFiles,
 } from "./textures";
 
 import {
@@ -63,4 +65,6 @@ export {
   deleteMetaMaterialParameters,
   createMetaMaterialParameters,
   editMetaMaterialParameters,
+  getMaterialFiles,
+  getTextureFiles,
 };

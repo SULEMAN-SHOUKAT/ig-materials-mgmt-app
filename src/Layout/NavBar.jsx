@@ -14,6 +14,7 @@ import Settings from "@mui/icons-material/Settings";
 import ThreeDRotationIcon from "@mui/icons-material/ThreeDRotation";
 import Texture from "@mui/icons-material/Texture";
 import Info from "@mui/icons-material/Info";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 
 const data = [
   { icon: <ViewInAr />, label: "Materials" },
@@ -21,6 +22,7 @@ const data = [
   { icon: <Texture />, label: "Textures" },
   { icon: <ThreeDRotationIcon />, label: "Mappings" },
   { icon: <Info />, label: "Meta Materials" },
+  { icon: <InsertDriveFileIcon />, label: "Files" },
 ];
 
 const links = {
@@ -29,6 +31,7 @@ const links = {
   Textures: "/textures",
   Mappings: "/mappings",
   "Meta Materials": "/meta-materials",
+  Files: "/files",
 };
 
 const FireNav = styled(List)({

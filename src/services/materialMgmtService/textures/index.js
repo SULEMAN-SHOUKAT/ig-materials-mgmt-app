@@ -18,4 +18,13 @@ const createTexture = (material) =>
 const editTexture = (name, update) =>
   axios.post(`${texturesUrl}/update`, { name, update });
 
-export { getTextures, deleteTextures, createTexture, editTexture };
+const getTextureFiles = (name) =>
+  axios.get(`${texturesUrl}//texture-images/${name}`);
+
+export {
+  getTextures,
+  deleteTextures,
+  createTexture,
+  editTexture,
+  getTextureFiles,
+};

@@ -11,6 +11,7 @@ import Parameters from "./pages/Parameters";
 import Texture from "./pages/Texture";
 import Mappings from "./pages/Mappings";
 import MetaMaterials from "./pages/MetaMaterials";
+import Files from "./pages/Files";
 
 import "./App.css";
 
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
   {
     path: "/meta-materials",
     element: <MetaMaterials />,
+  },
+  {
+    path: "/files",
+    element: <Files />,
   },
 ]);
 

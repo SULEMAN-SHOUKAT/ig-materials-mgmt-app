@@ -17,4 +17,13 @@ const createMaterial = (material) =>
 const editMaterial = (name, update) =>
   axios.post(`${materialsUrl}/update`, { name, update });
 
-export { getMaterials, deleteMaterials, createMaterial, editMaterial };
+const getMaterialFiles = (name) =>
+  axios.get(`${materialsUrl}/material-images/${name}`);
+
+export {
+  getMaterials,
+  deleteMaterials,
+  createMaterial,
+  editMaterial,
+  getMaterialFiles,
+};
