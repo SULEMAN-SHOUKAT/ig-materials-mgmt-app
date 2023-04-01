@@ -9,6 +9,7 @@ import Stack from "@mui/material/Stack";
 import AlertDialog from "./AlertDialog";
 
 const RowActions = ({ onEdit, onDelete }) => {
+  console.log(onDelete);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
   return (
     <TableCell align="left" padding="none">

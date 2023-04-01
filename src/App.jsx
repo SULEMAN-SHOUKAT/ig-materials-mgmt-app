@@ -10,12 +10,10 @@ import Materials from "./pages/Materials";
 import Parameters from "./pages/Parameters";
 import Texture from "./pages/Texture";
 import Mappings from "./pages/Mappings";
+import MetaMaterials from "./pages/MetaMaterials";
 
 import "./App.css";
 
-function MetaMaterials() {
-  return <h1>meta-materials</h1>;
-}
 const router = createBrowserRouter([
   {
     path: "/",

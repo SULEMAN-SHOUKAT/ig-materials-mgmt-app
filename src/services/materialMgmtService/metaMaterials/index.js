@@ -12,4 +12,15 @@ const getMetaMaterials = () =>
 const deleteMetaMaterials = (names) =>
   axios.delete(`${metaMaterialsUrl}/delete`, { data: { names } });
 
-export { getMetaMaterials, deleteMetaMaterials };
+const createMetaMaterial = (material) =>
+  axios.post(`${metaMaterialsUrl}/create`, { ...material });
+
+const editMetaMaterial = (name, update) =>
+  axios.post(`${metaMaterialsUrl}/update`, { name, update });
+
+export {
+  getMetaMaterials,
+  deleteMetaMaterials,
+  editMetaMaterial,
+  createMetaMaterial,
+};

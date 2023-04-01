@@ -4,6 +4,7 @@ const validateName = (name, oldParameters, formMode) => {
   if (isEmpty(name)) return "Name is required";
   if (oldParameters.some((param) => param.name === name) && formMode === "new")
     return "This name is already used";
+  if (name?.length > 45) return "Name is too long should be 45 characters max";
   return undefined;
 };
 

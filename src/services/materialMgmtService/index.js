@@ -4,8 +4,19 @@ import {
   createMaterial,
   editMaterial,
 } from "./materials";
-import { getMetaMaterials, deleteMetaMaterials } from "./metaMaterials";
+import {
+  getMetaMaterials,
+  deleteMetaMaterials,
+  editMetaMaterial,
+  createMetaMaterial,
+} from "./metaMaterials";
 
+import {
+  getMetaMaterialParameters,
+  deleteMetaMaterialParameters,
+  createMetaMaterialParameters,
+  editMetaMaterialParameters,
+} from "./metaMaterialParameters";
 import {
   getParameters,
   createParameters,
@@ -32,6 +43,8 @@ export {
   deleteMaterials,
   getMetaMaterials,
   deleteMetaMaterials,
+  editMetaMaterial,
+  createMetaMaterial,
   createMaterial,
   editMaterial,
   getParameters,
@@ -46,4 +59,8 @@ export {
   deleteMappings,
   createMappings,
   editMappings,
+  getMetaMaterialParameters,
+  deleteMetaMaterialParameters,
+  createMetaMaterialParameters,
+  editMetaMaterialParameters,
 };
