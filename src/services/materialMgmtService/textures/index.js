@@ -19,7 +19,13 @@ const editTexture = (name, update) =>
   axios.post(`${texturesUrl}/update`, { name, update });
 
 const getTextureFiles = (name) =>
-  axios.get(`${texturesUrl}//texture-images/${name}`);
+  axios.get(`${texturesUrl}/texture-images/${name}`);
+
+const deleteTexturesFiles = (name, imagesIds) =>
+  axios.delete(`${texturesUrl}/delete/images`, { data: { name, imagesIds } });
+
+const addTextureFile = (formData) =>
+  axios.post(`${texturesUrl}/add-image`, formData);
 
 export {
   getTextures,
@@ -27,4 +33,6 @@ export {
   createTexture,
   editTexture,
   getTextureFiles,
+  deleteTexturesFiles,
+  addTextureFile,
 };

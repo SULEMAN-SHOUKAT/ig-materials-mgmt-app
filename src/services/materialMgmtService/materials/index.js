@@ -20,10 +20,18 @@ const editMaterial = (name, update) =>
 const getMaterialFiles = (name) =>
   axios.get(`${materialsUrl}/material-images/${name}`);
 
+const deleteMaterialsFiles = (name, imagesIds) =>
+  axios.delete(`${materialsUrl}/delete/images`, { data: { name, imagesIds } });
+
+const addMaterialFile = (formData) =>
+  axios.post(`${materialsUrl}/add-image`, formData);
+
 export {
   getMaterials,
   deleteMaterials,
   createMaterial,
   editMaterial,
   getMaterialFiles,
+  deleteMaterialsFiles,
+  addMaterialFile,
 };

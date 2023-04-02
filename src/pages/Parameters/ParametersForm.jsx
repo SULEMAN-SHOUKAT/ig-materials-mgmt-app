@@ -175,7 +175,7 @@ const ParametersForm = ({ open, handleModalClose, parameters, formMode }) => {
               value={newParameters?.texture}
               onChange={(e) => fieldChange("texture", e.target.value)}
             >
-              {textures.length == 0 && (
+              {textures.length === 0 && (
                 <MenuItem disabled>No textures found</MenuItem>
               )}
               {!isLoadingTexture &&
@@ -228,7 +228,7 @@ const ParametersForm = ({ open, handleModalClose, parameters, formMode }) => {
               value={newParameters?.mapping}
               onChange={(e) => fieldChange("mapping", e.target.value)}
             >
-              {mappings.length == 0 && (
+              {mappings.length === 0 && (
                 <MenuItem disabled>No mappings found</MenuItem>
               )}
               {!isLoadingMappings &&

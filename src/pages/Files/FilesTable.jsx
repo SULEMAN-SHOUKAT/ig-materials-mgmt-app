@@ -16,6 +16,8 @@ import CustomTableHead from "../../components/CustomTableHead";
 import RowActions from "../../components/RowActions";
 import Loading from "../../components/Loading";
 
+import FilesForm from "./FilesForm";
+
 import useFiles from "../../store/files";
 import { table } from "../../utils";
 
@@ -28,12 +30,12 @@ const filesTableFields = [
   {
     id: "type",
     fieldKey: "type",
-    label: "Format [Extension]",
+    label: "Format",
   },
   {
     id: "size",
     fieldKey: "size",
-    label: "Size",
+    label: "Size (Kb)",
     isNumber: "true",
   },
   {
@@ -47,9 +49,15 @@ const sourcelabel = {
   materials: "Material",
   textures: "Texture",
 };
-const FilesTable = ({ source, name }) => {
-  const { files, isLoadingFiles, filesFilters, loadFiles, setFilesFilters } =
-    useFiles();
+const FilesTable = ({ source, name, setSelectedFile, selectedFile }) => {
+  const {
+    files,
+    isLoadingFiles,
+    filesFilters,
+    loadFiles,
+    setFilesFilters,
+    deleteFiles,
+  } = useFiles();
 
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("");
@@ -59,7 +67,9 @@ const FilesTable = ({ source, name }) => {
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    loadFiles(source, name);
+    if (name) {
+      loadFiles(source, name);
+    }
   }, [loadFiles, source, name]);
 
   const handleRequestSort = (event, property) => {
@@ -113,9 +123,6 @@ const FilesTable = ({ source, name }) => {
 
   const getFilteredFiles = () => table.filterData(files, filesFilters);
 
-  const getFilteredFields = () =>
-    filesTableFields.filter((field) => field.id !== "actions");
-
   return (
     <Box sx={{ width: "100%", height: "100%" }}>
       <Paper
@@ -132,7 +139,11 @@ const FilesTable = ({ source, name }) => {
             numSelected={selected.length}
             tableName={`${sourcelabel[source]} ${name}`}
             onSelectedDelete={() => {
-              // deleteFiles(selected, [handleSelectAllClick, loadFiles])
+              deleteFiles(source, name, selected, [
+                handleSelectAllClick,
+                () => loadFiles(source, name),
+              ]);
+              setSelectedFile(undefined);
             }}
             showForm={() => setShowForm(true)}
           />
@@ -174,10 +185,13 @@ const FilesTable = ({ source, name }) => {
                           aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row._id}
-                          selected={isItemSelected}
+                          selected={
+                            isItemSelected || selectedFile?._id === row._id
+                          }
                           sx={{ cursor: "pointer" }}
                           onClick={(e) => {
                             e.stopPropagation();
+                            setSelectedFile(row);
                           }}
                         >
                           <TableCell padding="checkbox">
@@ -199,7 +213,7 @@ const FilesTable = ({ source, name }) => {
                             scope="row"
                             sx={{ padding: "0px 0px 0px 5px" }}
                           >
-                            {row.name}
+                            {row.mode}
                           </TableCell>
                           <TableCell
                             align="left"
@@ -211,11 +225,18 @@ const FilesTable = ({ source, name }) => {
                             align="right"
                             sx={{ padding: "0px 10px 0px 5px" }}
                           >
-                            <Box>{row.size}</Box>
+                            <Box>{Math.round(row.size / 1024)}</Box>
                           </TableCell>
                           <RowActions
                             onDelete={() => {
-                              // deleteFiles([row], [loadFiles])
+                              deleteFiles(
+                                source,
+                                name,
+                                [row],
+                                [() => loadFiles(source, name)]
+                              );
+                              if (selectedFile?._id === row._id)
+                                setSelectedFile(undefined);
                             }}
                           />
                         </TableRow>
@@ -247,25 +268,30 @@ const FilesTable = ({ source, name }) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      {/* {showForm && (
-    <FilesForm
-      open={showForm}
-      handleModalClose={() => {
-        setShowForm(false);
-        setEditFile(null);
-      }}
-      fields={getFilteredFields()}
-      file={editFile}
-      formMode={editFile ? "edit" : "new"}
-    />
-  )} */}
+      {showForm && (
+        <FilesForm
+          open={showForm}
+          handleModalClose={() => {
+            setShowForm(false);
+          }}
+          source={source}
+          name={name}
+        />
+      )}
     </Box>
   );
 };
 
+FilesTable.defaultProps = {
+  selectedFile: undefined,
+  name: undefined,
+};
+
 FilesTable.propTypes = {
-  source: PropTypes.array.isRequired,
-  name: PropTypes.func.isRequired,
+  source: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  setSelectedFile: PropTypes.func.isRequired,
+  selectedFile: PropTypes.object,
 };
 
 export default FilesTable;

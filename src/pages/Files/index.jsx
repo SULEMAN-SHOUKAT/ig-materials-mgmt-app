@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 
 import FilesSourceTable from "./FilesSourceTable";
 import FilesTable from "./FilesTable";
+import FileViewer from "./FileViewer";
 
 import useMaterials from "../../store/materials";
 import useTexture from "../../store/texture";
@@ -15,6 +16,7 @@ const Files = () => {
     useTexture();
   const [source, setSource] = useState("textures");
   const [selectedSource, setSelectedSource] = useState({ name: "", table: "" });
+  const [selectedFile, setSelectedFile] = useState(undefined);
 
   useEffect(() => {
     loadMaterials();
@@ -51,14 +53,28 @@ const Files = () => {
             selectedTable={source}
             setFilter={onFilterUpdate}
             tableData={getTableData()}
-            setSelectedSource={setSelectedSource}
+            setSelectedSource={(src) => {
+              setSelectedSource(src);
+              setSelectedFile(undefined);
+            }}
             selectedSource={selectedSource}
           />
         </Grid>
-        <Grid item xs={5}>
-          <FilesTable source={source} name={selectedSource.name} />
+        <Grid item xs={4}>
+          <FilesTable
+            source={source}
+            name={
+              selectedSource.name === ""
+                ? textures[0]?.name
+                : selectedSource.name
+            }
+            setSelectedFile={setSelectedFile}
+            selectedFile={selectedFile}
+          />
         </Grid>
-        <Grid item xs={3}></Grid>
+        <Grid item xs={5}>
+          <FileViewer file={selectedFile} />
+        </Grid>
       </Grid>
     </Box>
   );
