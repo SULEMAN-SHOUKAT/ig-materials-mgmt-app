@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import Box from "@mui/material/Box";
 import { styled, ThemeProvider, createTheme } from "@mui/material/styles";
 import Divider from "@mui/material/Divider";
@@ -48,11 +50,11 @@ const FireNav = styled(List)({
   },
 });
 
-const navigateTo = (url) => {
-  window.location.href = url;
-};
-
 const NavBar = () => {
+  const navigate = useNavigate();
+  const navigateTo = (url) => {
+    navigate(url);
+  };
   return (
     <Box height={"100%"} style={{ borderRadius: "1px", border: "none" }}>
       <ThemeProvider

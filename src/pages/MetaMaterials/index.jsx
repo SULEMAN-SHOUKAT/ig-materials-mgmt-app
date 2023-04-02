@@ -28,11 +28,13 @@ const metaMaterialsTableFields = [
     id: "name",
     fieldKey: "name",
     label: "Name",
+    width: "21%",
   },
   {
     id: "description",
     fieldKey: "description",
     label: "Description",
+    width: "70%",
   },
   {
     id: "actions",
