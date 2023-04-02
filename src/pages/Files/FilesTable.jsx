@@ -148,7 +148,7 @@ const FilesTable = ({ source, name, setSelectedFile, selectedFile }) => {
             showForm={() => setShowForm(true)}
           />
           <TableContainer sx={{ maxHeight: "47rem" }}>
-            {!isLoadingFiles ? (
+            {!isLoadingFiles && (
               <Table
                 sx={{ minWidth: 100 }}
                 aria-labelledby="Files"
@@ -253,8 +253,6 @@ const FilesTable = ({ source, name, setSelectedFile, selectedFile }) => {
                   )}
                 </TableBody>
               </Table>
-            ) : (
-              <Loading message="loading files..." />
             )}
           </TableContainer>
         </Box>
