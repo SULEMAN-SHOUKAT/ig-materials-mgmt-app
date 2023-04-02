@@ -35,7 +35,7 @@ const filesTableFields = [
   {
     id: "size",
     fieldKey: "size",
-    label: "Size (Kb)",
+    label: "Size(Kb)",
     isNumber: "true",
   },
   {

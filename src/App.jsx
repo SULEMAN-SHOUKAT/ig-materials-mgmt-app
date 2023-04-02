@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 
 import NavBar from "./Layout/NavBar";
@@ -15,37 +15,10 @@ import Files from "./pages/Files";
 
 import "./App.css";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Materials />,
-  },
-  {
-    path: "/parameters",
-    element: <Parameters />,
-  },
-  {
-    path: "/textures",
-    element: <Texture />,
-  },
-  {
-    path: "/mappings",
-    element: <Mappings />,
-  },
-  {
-    path: "/meta-materials",
-    element: <MetaMaterials />,
-  },
-  {
-    path: "/files",
-    element: <Files />,
-  },
-]);
-
 const App = () => {
   const [showNavBar, setShowNavBar] = useState(true);
   return (
-    <>
+    <Router>
       <Header toggleNavBar={() => setShowNavBar(!showNavBar)} />
       <Grid container spacing={2} style={{ height: "100vh" }}>
         {showNavBar && (
@@ -54,11 +27,18 @@ const App = () => {
           </Grid>
         )}
         <Grid item xs={showNavBar ? 10 : 12} marginTop={8}>
-          <RouterProvider router={router} />
+          <Routes>
+            <Route path="/" element={<Materials />} />
+            <Route path="/parameters" element={<Parameters />} />
+            <Route path="/textures" element={<Texture />} />
+            <Route path="/mappings" element={<Mappings />} />
+            <Route path="/meta-materials" element={<MetaMaterials />} />
+            <Route path="/files" element={<Files />} />
+          </Routes>
         </Grid>
       </Grid>
       <Toast />
-    </>
+    </Router>
   );
 };
 
