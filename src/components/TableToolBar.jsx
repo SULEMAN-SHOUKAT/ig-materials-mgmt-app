@@ -59,11 +59,13 @@ const TableToolBar = ({
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Add new item">
-          <IconButton onClick={showForm}>
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
+        tableName !== " " && (
+          <Tooltip title="Add new item">
+            <IconButton onClick={showForm}>
+              <AddIcon />
+            </IconButton>
+          </Tooltip>
+        )
       )}
       <AlertDialog
         open={showAlertDialog}

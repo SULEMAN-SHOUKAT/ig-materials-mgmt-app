@@ -38,7 +38,7 @@ const Files = () => {
 
   return (
     <Box sx={{ width: "100%", height: "102%" }}>
-      <Grid container spacing={3} sx={{ width: "100%", height: "100%" }}>
+      <Grid container spacing={3} sx={{ width: "100%", height: "101%" }}>
         <Grid item xs={3}>
           <FilesSourceTable
             filters={getFilters()}
@@ -49,6 +49,7 @@ const Files = () => {
                   value === "textures" ? textures[0]?.name : materials[0]?.name,
                 source: value,
               });
+              setSelectedFile(undefined);
             }}
             selectedTable={source}
             setFilter={onFilterUpdate}

@@ -137,7 +137,7 @@ const FilesTable = ({ source, name, setSelectedFile, selectedFile }) => {
         <Box sx={{ maxHeight: "78%" }}>
           <TableToolBar
             numSelected={selected.length}
-            tableName={`${sourcelabel[source]} ${name}`}
+            tableName={`${name ? sourcelabel[source] : ""} ${name ? name : ""}`}
             onSelectedDelete={() => {
               deleteFiles(source, name, selected, [
                 handleSelectAllClick,
@@ -145,7 +145,9 @@ const FilesTable = ({ source, name, setSelectedFile, selectedFile }) => {
               ]);
               setSelectedFile(undefined);
             }}
-            showForm={() => setShowForm(true)}
+            showForm={() => {
+              if (name) setShowForm(true);
+            }}
           />
           <TableContainer sx={{ maxHeight: "47rem" }}>
             {!isLoadingFiles && (

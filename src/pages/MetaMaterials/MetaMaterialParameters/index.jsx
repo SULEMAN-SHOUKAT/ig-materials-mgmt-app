@@ -135,7 +135,7 @@ const MetaMaterialParameters = ({ metaMaterialName }) => {
         width: "98%",
         marginTop: "18px",
         marginLeft: "10px",
-        height: "98%",
+        height: "99.5%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
@@ -144,14 +144,18 @@ const MetaMaterialParameters = ({ metaMaterialName }) => {
       <Box sx={{ maxHeight: "78%" }}>
         <TableToolBar
           numSelected={selected.length}
-          tableName={`Meta Material ${metaMaterialName}`}
+          tableName={`${
+            metaMaterialName ? "Meta Materia " + metaMaterialName : " "
+          }`}
           onSelectedDelete={() =>
             deleteMetaMaterialParameters(selected, [
               handleSelectAllClick,
               () => loadMetaMaterialParameters(metaMaterialName),
             ])
           }
-          showForm={() => setShowForm(true)}
+          showForm={() => {
+            if (metaMaterialName) setShowForm(true);
+          }}
         />
         <TableContainer sx={{ maxHeight: "47rem" }}>
           {!isLoading ? (
