@@ -1,5 +1,5 @@
 import axios from "axios";
-import config from "../../../config/default.json";
+import { config } from "../../../config";
 
 const metaMaterialsUrl = `${config.api.igMaterialMgmtService}/meta-materials`;
 

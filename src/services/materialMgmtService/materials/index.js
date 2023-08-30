@@ -1,5 +1,5 @@
 import axios from "axios";
-import config from "../../../config/default.json";
+import { config } from "../../../config";
 
 const materialsUrl = `${config.api.igMaterialMgmtService}/materials`;
 const getMaterials = () =>
